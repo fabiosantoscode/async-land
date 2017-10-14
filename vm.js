@@ -26,6 +26,9 @@ function evaluateExpression (expr) {
   if (macros[expr[0]]) {
     return macros[expr[0]](...expr.slice(1))
   }
+  if (library[expr[0]]) {
+    return library[expr[0]](...expr.slice(1).map(evaluateExpression))
+  }
   assert(false)
 }
 

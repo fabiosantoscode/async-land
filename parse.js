@@ -1,5 +1,8 @@
+'use strict'
+
 const assert = require('assert')
 const events = require('events')
+const runtypes = require('runtypes')
 
 const rFunction = /[a-zA-Z+\-*\/#\.<>]+/
 const rNumberStart = /[0-9]/
@@ -104,22 +107,26 @@ function parseExpression (tokens, depth = 0) {
     return object
   }
 
+  if (peek() === '(') {
+    consume('(')
+
+    let args = []
+    while (peek() != ')') {
+      if (peek() == '(') {
+        args.push(parseExpression(tokens, depth + 1))
+        continue
+      }
+      args.push(consume())
+    }
+
+    consume(')')
+
+    return args
+  }
+
   if (typeof peek() === 'string') {
     return consume()
   }
-
-  consume('(')
-
-  let args = []
-  while (peek() != ')') {
-    if (peek() == '(') {
-      args.push(parseExpression(tokens, depth + 1))
-      continue
-    }
-    args.push(consume())
-  }
-
-  consume(')')
 
   return args
 }

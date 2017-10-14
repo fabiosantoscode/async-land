@@ -12,6 +12,7 @@ describe('parser', () => {
     ok.deepEqual(tokenise('[3]'), [ ']', [ 'number', 3 ], '[' ])
     ok.deepEqual(tokenise('(fn) [3]'), [ ']', [ 'number', 3 ], '[', ')', 'fn', '(' ])
     ok.deepEqual(tokenise('"foo"'), [ [ 'string', 'foo' ] ])
+    ok.deepEqual(tokenise('(())'), [')', ')', '(', '('])
   })
   it('parses strings, numbers, lists and maps', () => {
     ok.deepEqual(parse('[3]'), [ 'list', [ 'number', 3 ] ])
@@ -46,6 +47,12 @@ describe('parser', () => {
       ['list', ['list', ['number', 1]]]
     )
   })
+  it('parses conditions', () => {
+    ok.deepEqual(
+      parse('(if (< 2 3) 1 2)'),
+      ['if', ['<', ['number', 2], ['number', 3]], ['number', 1], ['number', 2]]
+    )
+  })
 })
 
 describe('jslisp', () => {
@@ -64,5 +71,7 @@ describe('jslisp', () => {
     ok.deepEqual(ex('[[1]]').toJS(), [[1]])
     ok.deepEqual(ex('[[]]').toJS(), [[]])
   })
-  it('does conditions')
+  it('does conditions', () => {
+    ok.deepEqual(ex('(if (< 2 3) 1 2)'), 1)
+  })
 })
