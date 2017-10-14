@@ -21,5 +21,6 @@ describe('jslisp', () => {
   })
   it('does conditions', () => {
     ok.deepEqual(ex('(if (< 2 3) 1 2)'), 1)
+    ok.deepEqual(ex('(if (> 2 3) 1 2)'), 2)
   })
 })

@@ -1,6 +1,9 @@
 const lib = exports
 
-exports.foreach = (...args) => args.length === 2 ? [].forEach.call(args[1], args[0]) :
-  (lib.foreach(args[0], args[args.length - 2]), lib.foreach(...args.slice(1)))
+exports.map = (list, fn) => list.map(fn)
+exports.forEach = (list, fn) => list.forEach(fn)
 exports['<'] = (a, b) => a < b
 exports['>'] = (a, b) => a > b
+exports['+'] = (a, b) => a.concat ? a.concat(b) : a + b
+exports['-'] = (a, b) => a.remove ? a.remove(b) : a - b
+exports['=='] = (a, b) => a.equals ? a.equals(b) : a === b

@@ -16,7 +16,7 @@ describe('parser', () => {
   it('parses strings, numbers, lists and maps', () => {
     ok.deepEqual(parse('[3]'), [ 'list', [ 'number', 3 ] ])
     ok.deepEqual(parse('3'), [ 'number', 3 ])
-    ok.deepEqual(parse('"3"'), [ 'string', 3 ])
+    ok.deepEqual(parse('"3"'), [ 'string', "3" ])
     ok.deepEqual(
       parse('{ foo: 3, bar: ["baz"], qux: "qux" }'),
       [
@@ -50,6 +50,26 @@ describe('parser', () => {
     ok.deepEqual(
       parse('(if (< 2 3) 1 2)'),
       ['if', ['<', ['number', 2], ['number', 3]], ['number', 1], ['number', 2]]
+    )
+  })
+  it('parses strings', () => {
+    ok.deepEqual(
+      parse('"foo"'),
+      ['string', 'foo']
+    )
+  })
+  it('parses uplevel notation', () => {
+    ok.deepEqual(
+      parse('(:let y 6) (+ 1 x) (+ 2 x)'),
+      [ 'let', 'y', ['number', 6], ['do', [ '+', [ 'number', 1 ], 'x' ], [ '+', [ 'number', 2 ], 'x' ]]]
+    )
+    ok.deepEqual(
+      parse('(+ x x) (:let x 2)'),
+      [
+        'do',
+        ['+', 'x', 'x'],
+        ['let', 'x', ['number', 2]]
+      ]
     )
   })
 })

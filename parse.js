@@ -107,6 +107,24 @@ function parseExpression (tokens, depth = 0) {
     return object
   }
 
+  if (peek() === '(' && peek(2) === ':') {
+    consume('('); consume(':')
+
+    let args = []
+    while (peek() != ')') {
+      if (peek() == '(') {
+        args.push(parseExpression(tokens, depth + 1))
+        continue
+      }
+      args.push(consume())
+    }
+
+    consume(')')
+
+    const innerParse = parseInner(tokens, depth + 1)
+    return [...args, ...(innerParse.length ? [innerParse] : []) ]
+  }
+
   if (peek() === '(') {
     consume('(')
 
@@ -131,31 +149,27 @@ function parseExpression (tokens, depth = 0) {
   return args
 }
 
-module.exports = function parse (code) {
-  const tokens = tokenise(code)
-
-  function peek (n = 0) {
-    return tokens[tokens.length - n]
-  }
-
-  function consume (tok = null) {
-    const current = tokens.pop()
-    if (tok != null && tok != current) {
-      throw new Error('Unexpected ' + current + ' expected ' + tok)
-    }
-    return current
-  }
-
+function parseInner(tokens, depth = 0) {
   const out = []
   while (tokens.length) {
-    out.push(parseExpression(tokens))
+    out.push(parseExpression(tokens, depth + 1))
   }
 
-  if (out.length != 1) {
+  if (out.length > 1) {
     return ['do', ...out]
+  }
+
+  if (out.length === 0) {
+    return []
   }
 
   return out[0]
 }
 
-Object.assign(module.exports, { tokenise})
+function parse (code) {
+  const tokens = tokenise(code)
+
+  return parseInner(tokens)
+}
+
+module.exports = Object.assign(parse, { tokenise, parse })
