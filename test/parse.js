@@ -16,7 +16,7 @@ describe('parser', () => {
   it('parses strings, numbers, lists and maps', () => {
     ok.deepEqual(parse('[3]'), [ 'list', [ 'number', 3 ] ])
     ok.deepEqual(parse('3'), [ 'number', 3 ])
-    ok.deepEqual(parse('"3"'), [ 'string', "3" ])
+    ok.deepEqual(parse('"3"'), [ 'string', '3' ])
     ok.deepEqual(
       parse('{ foo: 3, bar: ["baz"], qux: "qux" }'),
       [

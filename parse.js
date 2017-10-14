@@ -149,7 +149,7 @@ function parseExpression (tokens, depth = 0) {
   return args
 }
 
-function parseInner(tokens, depth = 0) {
+function parseInner (tokens, depth = 0) {
   const out = []
   while (tokens.length) {
     out.push(parseExpression(tokens, depth + 1))
@@ -172,4 +172,4 @@ function parse (code) {
   return parseInner(tokens)
 }
 
-module.exports = Object.assign(parse, { tokenise, parse })
+module.exports = Object.assign(parse, { tokenise, parse})
