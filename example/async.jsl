@@ -1,8 +1,8 @@
 
-(foreach console.log (map (.lines process.stdin)
+(forEach console.log (map (.lines process.stdin)
   (fn [line] .toUpperCase line)))
 
 (if (< (Math.random) 0.5)
-  (.on process 'exit' (fn [] (print 'Bye!')))
-  (.on process 'exit' (fn [] (print 'Goodbye!'))))
+  (.on process "exit" (fn [] (print "Bye!")))
+  (.on process "exit" (fn [] (print "Goodbye!"))))
 

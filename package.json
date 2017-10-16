@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "bin": {
+    "asyncland": "index.js"
+  },
   "directories": {
     "example": "example"
   },
@@ -14,6 +17,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "highland": "^2.11.1",
     "immutable": "^3.8.2",
     "lodash": "^4.17.4",
     "runtypes": "^0.12.0"
