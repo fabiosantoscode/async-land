@@ -1,10 +1,10 @@
 'use strict'
 
-function Scope({ variables } = {}) {
+function Scope ({ variables } = {}) {
   if (!(this instanceof Scope)) {
     return new Scope(...arguments)
   }
-  this.variables = variables || {};
+  this.variables = variables || {}
   this.stack = []
 }
 
@@ -25,7 +25,7 @@ Scope.prototype = {
       this.enter()
       try {
         return fn(...args)
-      } finally{
+      } finally {
         this.exit()
       }
     }

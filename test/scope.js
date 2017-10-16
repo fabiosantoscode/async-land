@@ -4,7 +4,7 @@ const ok = require('assert')
 const Scope = require('../scope')
 
 describe('scope', () => {
-  let scope;
+  let scope
   beforeEach(() => {
     scope = Scope()
   })
