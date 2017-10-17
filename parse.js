@@ -4,13 +4,15 @@ const assert = require('assert')
 const events = require('events')
 const runtypes = require('runtypes')
 
-const rFunction = /[a-zA-Z+\-*\/#\.<>]+/
+const rFunction = /[a-zA-Z+\.<>]+/
 const rNumberStart = /[0-9]/
 const rNumber = /[0-9\.]/
-const rWhitespace = /\s/
+const rWhitespace = /\s|^#.+$/
 
 function tokenise (code) {
   var out = []
+
+  code = code.replace(/#.*/g, '')
 
   for (var i = 0; i < code.length; i++) {
     const char = code[i]
@@ -43,7 +45,7 @@ function tokenise (code) {
     }
     if (rFunction.test(char)) {
       let str = code[i]
-      while(rFunction.test(code[++i])) {
+      while(rFunction.test(code[++i]) && code[i]) {
         str += code[i]
       }
       out.push(str)

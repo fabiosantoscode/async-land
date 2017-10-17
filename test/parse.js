@@ -12,6 +12,13 @@ describe('parser', () => {
     ok.deepEqual(tokenise('(fn) [3]'), [ ']', [ 'number', 3 ], '[', ')', 'fn', '(' ])
     ok.deepEqual(tokenise('"foo"'), [ [ 'string', 'foo' ] ])
     ok.deepEqual(tokenise('(())'), [')', ')', '(', '('])
+    ok.deepEqual(
+      tokenise(
+        `(let x "world"
+           # comments are ignored
+           (console.log "hello" x))`
+      ).reverse(),
+      ['(', 'let', 'x', ['string', 'world'], '(', 'console.log', ['string', 'hello'], 'x', ')', ')'])
   })
   it('parses strings, numbers, lists and maps', () => {
     ok.deepEqual(parse('[3]'), [ 'list', [ 'number', 3 ] ])
@@ -56,6 +63,14 @@ describe('parser', () => {
     ok.deepEqual(
       parse('"foo"'),
       ['string', 'foo']
+    )
+  })
+  it('parses nested fcalls', () => {
+    ok.deepEqual(
+      parse(`(let x "world"
+        # comments are ignored
+        (console.log "hello" x))`),
+      ['let', 'x', ['string', 'world'], ['console.log', ['string', 'hello'], 'x']]
     )
   })
   it('parses uplevel notation', () => {

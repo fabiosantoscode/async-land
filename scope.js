@@ -1,5 +1,7 @@
 'use strict'
 
+const get = require('lodash/get')
+
 function Scope ({ variables } = {}) {
   if (!(this instanceof Scope)) {
     return new Scope(...arguments)
@@ -11,7 +13,10 @@ function Scope ({ variables } = {}) {
 Scope.prototype = {
   constructor: Scope,
   let(name, value) {
-    this.variables[name] = value
+    return this.variables[name] = value
+  },
+  get(name) {
+    return this.variables[name] || get(this.variables.global, name)
   },
   enter() {
     this.stack.push(Object.create(this.variables))
@@ -33,3 +38,5 @@ Scope.prototype = {
 }
 
 module.exports = Scope
+module.exports.current = Scope({ variables: { global }})
+Object.seal(module.exports)

@@ -1,11 +1,26 @@
 #!/usr/bin/env node
 
 const fs = require('fs')
-const parse = require('./parse')
+const parser = require('./parse')
 const execute = require('./vm')
+const Scope = require('./scope')
 
-const [_, __, filename] = process.argv
+const yargs = require('yargs').argv
 
-const code = parse(fs.readFileSync(filename) + '')
+const { _: [filename, ...applicationArgs], parse, vv } = yargs
 
-execute(code)
+const code = parser(fs.readFileSync(filename) + '')
+
+if (parse) {
+  console.log(JSON.stringify(code, null, 2))
+  process.exit(0)
+}
+
+var scope = new Scope({ variables: { global} })
+scope.variables.global.process.argv = process.argv.slice(0, 2).concat(applicationArgs)
+Scope.current = scope
+
+if (vv) {
+  scope = 'vv'
+}
+execute(code, scope)
