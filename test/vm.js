@@ -64,7 +64,7 @@ describe('jslisp', () => {
   })
   it('reports missing functions', () => {
     ok.throws( () =>
-      ex(['nofunc'])
+      ex(['nofunc']),
     `Function not found: nofunc`)
   })
   it('calls functions', () => {
