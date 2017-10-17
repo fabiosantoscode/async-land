@@ -63,12 +63,11 @@ describe('jslisp', () => {
     )
   })
   it('reports missing functions', () => {
-    ok.throws( () =>
-      ex(['nofunc']),
-    `Function not found: nofunc`)
+    ok.throws(() => ex(['nofunc']),
+      `Function not found: nofunc`)
   })
   it('calls functions', () => {
-    Scope.current = Scope({ variables: { x: (x, y) => x+ y}})
+    Scope.current = Scope({ variables: { x: (x, y) => x + y}})
     ok.deepEqual(
       ex(['x', ['number', 2 ], ['number', 4]]),
       6
