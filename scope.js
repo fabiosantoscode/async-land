@@ -38,5 +38,5 @@ Scope.prototype = {
 }
 
 module.exports = Scope
-module.exports.current = Scope({ variables: { global }})
+module.exports.current = Scope({ variables: { global}})
 Object.seal(module.exports)

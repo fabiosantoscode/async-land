@@ -57,7 +57,7 @@ describe('jslisp', () => {
     ok.deepEqual(
       ex([
         'let', 'x', ['string', 'world'],
-          ['+', ['string', 'hello'], ['string', ', '], 'x'] ]),
+        ['+', ['string', 'hello'], ['string', ', '], 'x'] ]),
       'hello, world'
     )
   })

@@ -42,7 +42,7 @@ function evaluateExpression (expr, scope = USER_CALL) {
   return evalCall(fun, ...args)
 }
 
-function evalCall(fun, ...args) {
+function evalCall (fun, ...args) {
   const evalAry = args => args.map(arg => evaluateExpression(arg, INTERNAL_CALL))
   if (typeof fun == 'string' && macros[fun]) {
     return macros[fun](...args)
