@@ -2,6 +2,7 @@
 
 const ok = require('assert')
 const ex = require('../vm')
+const Scope = require('../scope')
 
 describe('jslisp', () => {
   it('processes strings, numbers', () => {
@@ -15,9 +16,9 @@ describe('jslisp', () => {
     )
   })
   it('can eval lists', () => {
-    ok.deepEqual(ex('[]').toJS(), [])
-    ok.deepEqual(ex('[[1]]').toJS(), [[1]])
-    ok.deepEqual(ex('[[]]').toJS(), [[]])
+    ok.deepEqual(ex('[ ]').toJS(), [])
+    ok.deepEqual(ex('[ [ 1  ] ]').toJS(), [[1]])
+    ok.deepEqual(ex('[ [ ] ]').toJS(), [[]])
   })
   it('does conditions', () => {
     ok.deepEqual(ex('(if (< 2 3) 1 2)'), 1)
@@ -59,6 +60,18 @@ describe('jslisp', () => {
         'let', 'x', ['string', 'world'],
         ['+', ['string', 'hello'], ['string', ', '], 'x'] ]),
       'hello, world'
+    )
+  })
+  it('reports missing functions', () => {
+    ok.throws( () =>
+      ex(['nofunc'])
+    `Function not found: nofunc`)
+  })
+  it('calls functions', () => {
+    Scope.current = Scope({ variables: { x: (x, y) => x+ y}})
+    ok.deepEqual(
+      ex(['x', ['number', 2 ], ['number', 4]]),
+      6
     )
   })
 })

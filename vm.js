@@ -13,45 +13,51 @@ function getFunction (name) {
   if (library[name]) {
     return library[name]
   }
-  return Scope.current.get(name)
 }
 
 function evalFun (expr) {
+  if (typeof expr === 'string' && Scope.current.variables[expr]) return Scope.current.variables[expr]
   if (typeof expr === 'string' || typeof expr === 'function') return expr
-  return evaluateExpression(expr, INTERNAL_CALL)
+  return evaluateExpression(expr)
 }
 
-const USER_CALL = Symbol()
-const INTERNAL_CALL = Symbol()
-function evaluateExpression (expr, scope = USER_CALL) {
-  if (typeof expr === 'string' && scope == USER_CALL) {
-    return evaluateExpression(parse(expr), INTERNAL_CALL)
-  }
+function evaluateExpression (expr) {
   if (typeof expr === 'string') {
     if (Scope.current.variables[expr]) {
       return Scope.current.variables[expr]
     }
+    /* istanbul ignore next */
     throw new Error(expr + ' could not be evaluated')
   }
-  if (scope == 'vv') {
+  /* istanbul ignore next */
+  if (global.ASYNCLAND_VERBOSE) {
     console.log('evaluateExpression', expr)
   }
   assert(Array.isArray(expr), 'trying to eval non-array')
   let [fun, ...args] = expr
   fun = evalFun(fun)
-  return evalCall(fun, ...args)
-}
-
-function evalCall (fun, ...args) {
-  const evalAry = args => args.map(arg => evaluateExpression(arg, INTERNAL_CALL))
   if (typeof fun == 'string' && macros[fun]) {
     return macros[fun](...args)
+  }
+  if (
+    typeof fun == 'string' &&
+    (fun in Scope.current.variables)
+  ) {
+    fun = Scope.current.variables[fun]
   }
   const fn = getFunction(fun)
   if (typeof fn != 'function') {
     throw new Error('Function not found: ' + fun)
   }
-  return fn(...evalAry(args))
+  return fn(...args.map(evaluateExpression))
 }
 
-module.exports = evaluateExpression
+function clean (expr) {
+  return expr.map(exprIn => typeof exprIn === 'number' ? ['number', exprIn] : exprIn)
+}
+
+module.exports = (expr, scope) => (
+typeof expr === 'string'
+  ? evaluateExpression(parse(expr))
+  : evaluateExpression(expr)
+)

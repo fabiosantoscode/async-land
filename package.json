@@ -11,6 +11,7 @@
   },
   "scripts": {
     "test": "mocha",
+    "test:coverage": "istanbul cover _mocha && istanbul check-coverage --statements 100 2>&1 /dev/null",
     "lint": "echo *.js test/*.js | xargs standard-format -w",
     "precommit": "npm run lint && npm run test"
   },
@@ -19,6 +20,7 @@
   "dependencies": {
     "highland": "^2.11.1",
     "immutable": "^3.8.2",
+    "istanbul": "^0.4.5",
     "lodash": "^4.17.4",
     "runtypes": "^0.12.0",
     "yargs": "^9.0.1"

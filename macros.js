@@ -6,8 +6,8 @@ const ex = () => require('./vm')
 const Immutable = require('immutable')
 
 const mac = module.exports
-mac.string = str => (assert(typeof str === 'string'), str)
-mac.number = n => (assert(typeof n === 'number'), n)
+mac.string = str => (assert(typeof str === 'string', str), str)
+mac.number = n => (assert(typeof n === 'number', JSON.stringify(n)), n)
 mac.list = (...items) => Immutable.List.of(...items.map(ex()))
 
 mac.do = (...args) => args.reduce((accum, val) => ex()(val), null)

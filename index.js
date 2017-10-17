@@ -3,7 +3,6 @@
 const fs = require('fs')
 const parser = require('./parse')
 const execute = require('./vm')
-const Scope = require('./scope')
 
 const yargs = require('yargs').argv
 
@@ -16,11 +15,9 @@ if (parse) {
   process.exit(0)
 }
 
-var scope = new Scope({ variables: { global} })
-scope.variables.global.process.argv = process.argv.slice(0, 2).concat(applicationArgs)
-Scope.current = scope
+process.argv = process.argv.slice(0, 2).concat(applicationArgs)
 
 if (vv) {
-  scope = 'vv'
+  global.ASYNCLAND_VERBOSE = true
 }
-execute(code, scope)
+execute(code)

@@ -18,9 +18,9 @@ function tokenise (code) {
     const char = code[i]
     if (rWhitespace.test(char)) { continue }
     if ('()[]{}:,#'.indexOf(char) != -1) { out.push(char); continue }
-    if ('"\''.indexOf(char) !== -1) {
+    if ("'".indexOf(char) !== -1) {
       let str = ''
-      while ('"\''.indexOf(code[++i]) === -1) {
+      while ("'".indexOf(code[++i]) === -1) {
         str += code[i]
       }
       out.push(['string', str])

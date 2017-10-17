@@ -15,9 +15,6 @@ Scope.prototype = {
   let(name, value) {
     return this.variables[name] = value
   },
-  get(name) {
-    return this.variables[name] || get(this.variables.global, name)
-  },
   enter() {
     this.stack.push(Object.create(this.variables))
     this.variables = this.stack[this.stack.length - 1]
