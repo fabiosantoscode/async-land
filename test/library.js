@@ -17,4 +17,9 @@ describe('library', () => {
     ok.equal(lib['>'](2, 1), true)
     ok.equal(lib['>'](1, 2), false)
   })
+  it('forEach', () => {
+    let x = 0
+    lib.forEach([1, 2], item => x = item)
+    ok.equal(x, 2)
+  })
 })

@@ -10,7 +10,10 @@ describe('parser', () => {
     ok.deepEqual(tokenise('(fn)'), [ ')', 'fn', '(' ])
     ok.deepEqual(tokenise('[3]'), [ ']', [ 'number', 3 ], '[' ])
     ok.deepEqual(tokenise('(fn) [3]'), [ ']', [ 'number', 3 ], '[', ')', 'fn', '(' ])
+    ok.deepEqual(tokenise('10'), [ [ 'number', 10 ] ])
+    ok.throws(() => tokenise(' 💩 '), /Invalid character/)
     ok.deepEqual(tokenise('"foo"'), [ [ 'string', 'foo' ] ])
+    ok.deepEqual(tokenise("'foo'"), [ [ 'string', 'foo' ] ])
     ok.deepEqual(tokenise('(())'), [')', ')', '(', '('])
     ok.deepEqual(
       tokenise(
@@ -21,8 +24,11 @@ describe('parser', () => {
       ['(', 'let', 'x', ['string', 'world'], '(', 'console.log', ['string', 'hello'], 'x', ')', ')'])
   })
   it('parses strings, numbers, lists and maps', () => {
+    ok.throws(() => parse('('))
     ok.deepEqual(parse('[3]'), [ 'list', [ 'number', 3 ] ])
+    ok.deepEqual(parse('(:x (y)) (z)'), [ 'x', [ 'y' ], [ 'z' ] ])
     ok.deepEqual(parse('3'), [ 'number', 3 ])
+    ok.deepEqual(parse('(:x [ 1 ]) (y)'), ['x', ['list', ['number', 1]], ['y']])
     ok.deepEqual(parse('"3"'), [ 'string', '3' ])
     ok.deepEqual(
       parse('{ foo: 3, bar: ["baz"], qux: "qux" }'),

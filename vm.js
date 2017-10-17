@@ -23,11 +23,12 @@ function evalFun (expr) {
 
 function evaluateExpression (expr) {
   if (typeof expr === 'string') {
+    /* istanbul ignore else */
     if (Scope.current.variables[expr]) {
       return Scope.current.variables[expr]
+    } else {
+      throw new Error(expr + ' could not be evaluated')
     }
-    /* istanbul ignore next */
-    throw new Error(expr + ' could not be evaluated')
   }
   /* istanbul ignore next */
   if (global.ASYNCLAND_VERBOSE) {
@@ -39,21 +40,11 @@ function evaluateExpression (expr) {
   if (typeof fun == 'string' && macros[fun]) {
     return macros[fun](...args)
   }
-  if (
-    typeof fun == 'string' &&
-    (fun in Scope.current.variables)
-  ) {
-    fun = Scope.current.variables[fun]
-  }
   const fn = getFunction(fun)
   if (typeof fn != 'function') {
     throw new Error('Function not found: ' + fun)
   }
   return fn(...args.map(evaluateExpression))
-}
-
-function clean (expr) {
-  return expr.map(exprIn => typeof exprIn === 'number' ? ['number', exprIn] : exprIn)
 }
 
 module.exports = (expr, scope) => (

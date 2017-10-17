@@ -114,11 +114,7 @@ function parseExpression (tokens, depth = 0) {
 
     let args = []
     while (peek() != ')') {
-      if (peek() == '(') {
-        args.push(parseExpression(tokens, depth + 1))
-        continue
-      }
-      args.push(consume())
+      args.push(parseExpression(tokens, depth + 1))
     }
 
     consume(')')
@@ -144,11 +140,12 @@ function parseExpression (tokens, depth = 0) {
     return args
   }
 
+  /* istanbul ignore else */
   if (typeof peek() === 'string') {
     return consume()
+  } else {
+    assert(false, 'unknown token ' + peek())
   }
-
-  return args
 }
 
 function parseInner (tokens, depth = 0) {
