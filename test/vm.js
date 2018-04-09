@@ -1,8 +1,8 @@
 'use strict'
 
 const ok = require('assert')
-const ex = require('../vm')
-const Scope = require('../scope')
+const ex = require('../lib/vm')
+const Scope = require('../lib/scope')
 
 describe('jslisp', () => {
   it('processes strings, numbers', () => {

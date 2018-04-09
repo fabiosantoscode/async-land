@@ -1,7 +1,7 @@
 'use strict'
 
 const ok = require('assert')
-const Scope = require('../scope')
+const Scope = require('../lib/scope')
 
 describe('scope', () => {
   let scope
@@ -23,5 +23,6 @@ describe('scope', () => {
     })()
 
     ok.equal(scope.variables.a, 'c')
+    ok(executed)
   })
 })

@@ -12,7 +12,7 @@
   "scripts": {
     "test": "mocha",
     "test:coverage": "istanbul cover _mocha && istanbul check-coverage --statements 100",
-    "lint": "echo *.js test/*.js | xargs standard-format -w",
+    "lint": "echo lib/*.js test/*.js | xargs standard-format -w",
     "precommit": "npm run lint && npm run test"
   },
   "author": "",

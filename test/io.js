@@ -1,7 +1,7 @@
 'use strict'
 
 const ok = require('assert')
-const ex = require('../vm')
+const ex = require('../lib/vm')
 
 describe('io', () => {
 })

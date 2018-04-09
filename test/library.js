@@ -2,7 +2,7 @@
 
 const ok = require('assert')
 const immutable = require('immutable')
-const lib = require('../library')
+const lib = require('../lib/library')
 
 describe('library', () => {
   it('map', () => {

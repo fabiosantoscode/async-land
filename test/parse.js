@@ -1,7 +1,7 @@
 'use strict'
 
 const ok = require('assert')
-const parse = require('../parse')
+const parse = require('../lib/parse')
 const tokenise = parse.tokenise
 
 describe('parser', () => {
